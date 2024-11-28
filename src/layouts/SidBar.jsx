@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { TbLayoutDashboard } from "react-icons/tb";
+import { MdEventAvailable } from "react-icons/md";
+
 import { Link } from "react-router-dom";
 
 export default function Sidebar() {
@@ -57,6 +59,14 @@ export default function Sidebar() {
                 className="text-white hover:text-gray-300 flex items-center gap-2 text-sm font-semibold py-2"
               >
                 <TbLayoutDashboard size={20} /> Dashbord
+              </Link>
+            </li>
+            <li className="items-center">
+              <Link
+                to="/all_event"
+                className="text-white hover:text-gray-300 flex items-center gap-2 text-sm font-semibold py-2"
+              >
+                <MdEventAvailable size={20} /> Show Events
               </Link>
             </li>
           </ul>
