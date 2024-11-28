@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginSuccess, loginFailure } from "../../redux/Slice/auth/login";
+import { loginSuccess, loginFailure } from "../../redux/Slice/auth/auth";
 import path from "../../axios/axios";
 import Cookies from 'js-cookie';
 import { useNavigate } from "react-router-dom";
