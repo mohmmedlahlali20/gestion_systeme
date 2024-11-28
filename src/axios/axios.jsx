@@ -8,10 +8,13 @@ const path = axios.create({
 path.interceptors.request.use(
   function (config) {
     config.headers["Content-Type"] = "application/json";
-    const token = Cookies.get('token')
+    const token = Cookies.get('token');
+    console.log('Token retrieved in interceptor:', token);
 
-    if(token){
+    if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
+    } else {
+      console.error('No token found in cookies');
     }
     return config;
   },
