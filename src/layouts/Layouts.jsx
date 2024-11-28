@@ -1,18 +1,16 @@
 import React from 'react'
 import { Outlet } from "react-router-dom";
-import {SidBar} from '../layouts';
+import { SidBar } from '../layouts';
 
 export default function Layouts() {
-  return (
-    <div className="flex flex-col overflow-y-hidden">
-            <main className="flex-grow flex items-center justify-center  ">
-                <SidBar/>
-                <div className="container mx-auto ">
-                    <div className="">
-                        <Outlet />
-                    </div>
+    return (
+        <div className="flex h-screen">
+            <SidBar />
+            <div className="flex-grow ml-64 bg-gray-100 overflow-y-auto">
+                <div className="container mx-auto px-4 py-6">
+                    <Outlet />
                 </div>
-            </main>
+            </div>
         </div>
-  )
+    )
 }
