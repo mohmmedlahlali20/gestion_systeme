@@ -5,9 +5,7 @@ export default function Dashboard() {
     <div className="p-6 bg-gray-100 min-h-screen">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold text-gray-800">Dashboard</h1>
-        <button className="px-4 py-2 bg-teal-500 text-white rounded-lg shadow hover:bg-teal-600">
-          Ajouter un élément
-        </button>
+        
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
