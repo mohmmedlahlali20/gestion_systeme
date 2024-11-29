@@ -1,23 +1,35 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllEvents } from "../../redux/Slice/event/event";
+import CreateEvent from "./CreateEvent";
 
 export default function AllEvents() {
   const dispatch = useDispatch();
   const { loading, error, events } = useSelector((state) => state.event);
 
+  const [showModal, setShowModal] = useState(false);
+
   useEffect(() => {
     dispatch(fetchAllEvents());
   }, [dispatch]);
 
+  const handleUpdate = (id) => {
+    console.log("Update event with ID:", id);
+  };
 
-
+  const handleDelete = (id) => {
+    console.log("Delete event with ID:", id);
+  };
+  
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="p-4">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-bold text-gray-800">Liste des Événements</h2>
-          <button className="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition duration-300">
+          <button
+            onClick={() => setShowModal(true)}
+            className="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition duration-300"
+          >
             Ajouter
           </button>
         </div>
@@ -40,7 +52,7 @@ export default function AllEvents() {
             </thead>
             <tbody>
               {events.map((event, index) => (
-                <tr key={event._id} className="border-b hover:bg-gray-100">
+                <tr key={index + 1} className="border-b hover:bg-gray-100">
                   <td className="px-4 py-2">{index + 1}</td>
                   <td className="px-4 py-2">{event.Title}</td>
                   <td className="px-4 py-2">{event.Date}</td>
@@ -48,7 +60,7 @@ export default function AllEvents() {
                   <td className="px-4 py-2 text-center">
                     <button
                       className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 mx-1"
-                      onClick={() => handleUpdate(event.id)}
+                      onClick={() => handleUpdate(event._id)}
                     >
                       Modifier
                     </button>
@@ -65,6 +77,8 @@ export default function AllEvents() {
           </table>
         </div>
       )}
+      {showModal && <CreateEvent showModal={showModal} setShowModal={setShowModal} />}
     </div>
   );
 }
+
