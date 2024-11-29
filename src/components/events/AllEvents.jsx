@@ -16,8 +16,8 @@ export default function AllEvents() {
   }, [dispatch]);
 
   const handleUpdate = (event) => {
-    setCurrentEvent(event); // Set the event data to be updated
-    setShowModal(true); // Open the update modal
+    setCurrentEvent(event);
+    setShowModal(true); 
   };
 
   const handleDelete = (id) => {
