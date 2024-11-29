@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { TbLayoutDashboard } from "react-icons/tb";
 import { MdEventAvailable } from "react-icons/md";
+import { FaUsers } from "react-icons/fa";
 
 import { Link } from "react-router-dom";
 
@@ -19,12 +20,7 @@ export default function Sidebar() {
           <i className="fas fa-bars"></i>
         </button>
 
-        <a
-          className="md:block text-left md:pb-2 text-white mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
-          href="/"
-        >
-          Notus React
-        </a>
+    
 
         <div
           className={`md:flex md:flex-col md:items-stretch md:opacity-100 md:relative md:mt-4 md:shadow-none shadow absolute top-0 left-0 right-0 z-40 overflow-y-auto overflow-x-hidden h-auto items-center flex-1 rounded ${collapseShow}`}
@@ -67,6 +63,14 @@ export default function Sidebar() {
                 className="text-white hover:text-gray-300 flex items-center gap-2 text-sm font-semibold py-2"
               >
                 <MdEventAvailable size={20} /> Show Events
+              </Link>
+            </li>
+            <li className="items-center">
+              <Link
+                to="/all_Users"
+                className="text-white hover:text-gray-300 flex items-center gap-2 text-sm font-semibold py-2"
+              >
+                <FaUsers size={20} /> All Users
               </Link>
             </li>
           </ul>
