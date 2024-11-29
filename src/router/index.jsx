@@ -1,41 +1,51 @@
 import { createBrowserRouter } from "react-router-dom";
-import { Register, Login } from "../pages";
+import { Register, Login, Home } from "../pages";
 import { AllEvents, Dashboard, GetAllUsers } from "../components";
 import Layouts from "../layouts/Layouts";
-
+import ProtectedRoute from "./protectedroutes";
+import Authorization from "./authorization";
 
 
 const router = createBrowserRouter([
     {
-
-        path: "/",
-        element: <Layouts />,
+      
+        element: (
+            <ProtectedRoute>
+                <Layouts />
+            </ProtectedRoute>
+        ),
         children: [
             {
-                path: "/dashbord",
-                element: <Dashboard />
+                path: "dashbord", 
+                element: <Dashboard />,
             },
             {
-                path: "/all_event",
-                element: <AllEvents />
+                path: "all_event",
+                element: <AllEvents />,
             },
             {
-                path: "/all_Users",
-                element: <GetAllUsers/>
+                path: "all_Users",
+                element: <GetAllUsers />,
             },
         ],
-
     },
     {
         path: "/login",
-        element: <Login />
-
+        element: <Login />,
     },
     {
-        path: "/Register",
-        element: <Register />
-
+        path: "/register",
+        element: <Register />,
     },
-])
+    {
+        path: '/authorization',
+        element: <Authorization/>
+    },
+    {
+        path: "/",
+        element: <Home/>
+    }
 
-export default router
+]);
+
+export default router;
