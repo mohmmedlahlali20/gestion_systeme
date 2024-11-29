@@ -2,25 +2,28 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllEvents } from "../../redux/Slice/event/event";
 import CreateEvent from "./CreateEvent";
+import UpdateEvent from "./UpdateEvent";
 
 export default function AllEvents() {
   const dispatch = useDispatch();
   const { loading, error, events } = useSelector((state) => state.event);
 
   const [showModal, setShowModal] = useState(false);
+  const [currentEvent, setCurrentEvent] = useState(null);
 
   useEffect(() => {
     dispatch(fetchAllEvents());
   }, [dispatch]);
 
-  const handleUpdate = (id) => {
-    console.log("Update event with ID:", id);
+  const handleUpdate = (event) => {
+    setCurrentEvent(event); // Set the event data to be updated
+    setShowModal(true); // Open the update modal
   };
 
   const handleDelete = (id) => {
     console.log("Delete event with ID:", id);
   };
-  
+
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="p-4">
@@ -60,13 +63,13 @@ export default function AllEvents() {
                   <td className="px-4 py-2 text-center">
                     <button
                       className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 mx-1"
-                      onClick={() => handleUpdate(event._id)}
+                      onClick={() => handleUpdate(event)}
                     >
                       Modifier
                     </button>
                     <button
                       className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 mx-1"
-                      onClick={() => handleDelete(event.id)}
+                      onClick={() => handleDelete(event._id)}
                     >
                       Supprimer
                     </button>
@@ -77,8 +80,17 @@ export default function AllEvents() {
           </table>
         </div>
       )}
-      {showModal && <CreateEvent showModal={showModal} setShowModal={setShowModal} />}
+      {showModal && currentEvent && (
+        <UpdateEvent
+          eventId={currentEvent._id}
+          eventDetails={currentEvent}
+          showModal={showModal}
+          setShowModal={setShowModal}
+        />
+      )}
+      {showModal && !currentEvent && (
+        <CreateEvent showModal={showModal} setShowModal={setShowModal} />
+      )}
     </div>
   );
 }
-
