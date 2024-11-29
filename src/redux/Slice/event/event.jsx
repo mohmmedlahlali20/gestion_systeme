@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import path from "../../../axios/axios";
+import Swal from "sweetalert2";
 
 export const fetchAllEvents = createAsyncThunk(
-  "event/fetchAllEvents",
+  "fetchAllEvents",
   async (_, { rejectWithValue }) => {
     try {
       const response = await path.get("/event/getAllEvent");
@@ -15,17 +16,31 @@ export const fetchAllEvents = createAsyncThunk(
 );
 
 export const createEvent = createAsyncThunk(
-  "event/createEvent",
+  "createEvent",
   async (eventData, { rejectWithValue }) => {
     try {
       const response = await path.post("/event/create", eventData);
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Événement ajouté avec succès",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       return response.data;
     } catch (error) {
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: "Échec de la création de l'événement",
+        showConfirmButton: true,
+      });
       console.error("Error creating event:", error);
       return rejectWithValue("Failed to create event");
     }
   }
 );
+
 
 const eventSlice = createSlice({
   name: "event",
