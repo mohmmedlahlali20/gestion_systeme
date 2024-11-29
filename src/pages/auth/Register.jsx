@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerSuccess, registerFailure } from "../../redux/Slice/auth/auth";
 import path from "../../axios/axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -11,12 +12,14 @@ export default function Register() {
   const { loading, error } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
+  const navigate = useNavigate()
+
   const register = async (e) => {
     e.preventDefault();
     try {
       const response = await path.post("/auth/register", { email, password, firstName, lastName });
       console.log(response.data);
-      
+      navigate('/login')
       dispatch(registerSuccess(response.data));
     } catch (err) {
       dispatch(registerFailure(err.response?.data?.message || "Registration failed"));
