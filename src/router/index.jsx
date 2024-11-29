@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import { Register, Login, Home } from "../pages";
+import { Register, Login, Home, ShowAllEvents } from "../pages";
 import { AllEvents, Dashboard, GetAllUsers } from "../components";
 import Layouts from "../layouts/Layouts";
 import ProtectedRoute from "./protectedroutes";
@@ -44,6 +44,10 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <Home/>
+    },
+    {
+        path: "/users",
+        element: <ShowAllEvents/>
     }
 
 ]);
