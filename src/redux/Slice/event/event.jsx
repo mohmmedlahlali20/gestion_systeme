@@ -42,6 +42,38 @@ export const createEvent = createAsyncThunk(
 );
 
 
+export const addUserToEvent = createAsyncThunk(
+  "addUserToEvent",
+  async ({ eventId, usersData }, { rejectWithValue }) => {
+    console.log(usersData)
+    try {
+      const response = await path.post("/event/add_user", {
+        eventId, 
+        userIds:usersData, 
+      });
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Utilisateur ajouté à l'événement avec succès",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return { eventId, user: response.data };
+    } catch (error) {
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: "Échec de l'ajout de l'utilisateur",
+        showConfirmButton: true,
+      });
+      console.error("Error adding user to event:", error);
+      return rejectWithValue("Failed to add user to event");
+    }
+  }
+);
+
+
+
 const eventSlice = createSlice({
   name: "event",
   initialState: {
@@ -53,35 +85,54 @@ const eventSlice = createSlice({
     createEvent: (state, action) => {
       state.events.push(action.payload);
     },
+    addUserInEvent: (state, action) => {
+
+    }
   }, 
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllEvents.pending, (state) => {
         state.loading = true;
-        state.error = null; 
+        state.error = null;
       })
       .addCase(fetchAllEvents.fulfilled, (state, action) => {
         state.loading = false;
-        state.events = action.payload; 
+        state.events = action.payload;
       })
       .addCase(fetchAllEvents.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-
       .addCase(createEvent.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(createEvent.fulfilled, (state, action) => {
         state.loading = false;
-        state.events.push(action.payload); 
+        state.events.push(action.payload);
       })
       .addCase(createEvent.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(addUserToEvent.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(addUserToEvent.fulfilled, (state, action) => {
+        state.loading = false;
+        const { eventId, user } = action.payload;
+        const event = state.events.find((e) => e.id === eventId);
+        if (event) {
+          event.users = [...(event.users || []), user]; 
+        }
+      })
+      .addCase(addUserToEvent.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
+  
 });
 
 export default eventSlice.reducer;
