@@ -5,5 +5,6 @@ import GetAllUsers from "./users/getAllUsers";
 export {
     Dashboard,
     AllEvents,
-    GetAllUsers
+    GetAllUsers,
+    
 }
