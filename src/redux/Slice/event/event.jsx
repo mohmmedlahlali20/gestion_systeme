@@ -14,7 +14,6 @@ export const fetchAllEvents = createAsyncThunk(
     }
   }
 );
-
 export const createEvent = createAsyncThunk(
   "createEvent",
   async (eventData, { rejectWithValue }) => {
@@ -40,7 +39,6 @@ export const createEvent = createAsyncThunk(
     }
   }
 );
-
 export const updateEvent = createAsyncThunk(
   "updateEvent",
   async ({ eventId, updateEventData }, { rejectWithValue }) => {
@@ -66,7 +64,6 @@ export const updateEvent = createAsyncThunk(
     }
   }
 );
-
 export const addUserToEvent = createAsyncThunk(
   "event/addUserToEvent",
   async ({ eventId, usersData }, { rejectWithValue }) => {
@@ -95,6 +92,30 @@ export const addUserToEvent = createAsyncThunk(
     }
   }
 );
+export const getEventByUserId = createAsyncThunk('GetUserIDs',
+  async ({ userId }, { rejectWithValue }) => {
+    try {
+      const res = await path.get(`event/eventsUser/${userId}`)
+      return res.data
+    } catch (error) {
+      console.error("Error fetching events:", error);
+      return rejectWithValue("Failed to fetch events");
+    }
+  }
+
+)
+
+export const DeleteEventByID = createAsyncThunk('removeEvents',
+  async ({ eventId }, { rejectWithValue }) => {
+    try {
+      const res = await path.delete(`event/remove/${eventId}`);
+      return res.data;
+    } catch (error) {
+      console.error("Error deleting event:", error);
+      return rejectWithValue("Failed to delete event");
+    }
+  }
+);
 
 const eventSlice = createSlice({
   name: "event",
@@ -114,6 +135,9 @@ const eventSlice = createSlice({
         event.users = [...(event.users || []), user];
       }
     },
+    removeEventFromState: (state, action) => {
+      state.events = state.events.filter(event => event.id !== action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -129,7 +153,18 @@ const eventSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
+      .addCase(getEventByUserId.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getEventByUserId.fulfilled, (state, action) => {
+        state.loading = false;
+        state.events = action.payload;
+      })
+      .addCase(getEventByUserId.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
       .addCase(createEvent.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -142,7 +177,6 @@ const eventSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
       .addCase(addUserToEvent.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -159,7 +193,6 @@ const eventSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
       .addCase(updateEvent.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -175,10 +208,22 @@ const eventSlice = createSlice({
       .addCase(updateEvent.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(DeleteEventByID.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(DeleteEventByID.fulfilled, (state, action) => {
+        state.loading = false;
+        state.events = state.events.filter(event => event.id !== action.payload.id);
+      })
+      .addCase(DeleteEventByID.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
 
-export const { createEvent: createEventAction, addUserInEvent } = eventSlice.actions;
+export const { createEvent: createEventAction, addUserInEvent, removeEventFromState } = eventSlice.actions;
 
 export default eventSlice.reducer;
