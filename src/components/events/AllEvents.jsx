@@ -6,7 +6,7 @@ import UpdateEvent from "./UpdateEvent";
 
 export default function AllEvents() {
   const dispatch = useDispatch();
-  const { loading, error, events } = useSelector((state) => state.event);
+    const { loading, error, events } = useSelector((state) => state.event);
 
   const [showModal, setShowModal] = useState(false);
   const [currentEvent, setCurrentEvent] = useState(null);
