@@ -6,18 +6,18 @@ const UpdateEvent = ({ eventId, showModal, setShowModal, eventDetails }) => {
   const dispatch = useDispatch();
   
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    date: "",
+    Title: "",
+    Description: "",
+    Date: "",
     location: "",
   });
 
   useEffect(() => {
     if (eventDetails) {
       setFormData({
-        title: eventDetails.Title || "",
-        description: eventDetails.Description || "",
-        date: eventDetails.Date || "",
+        Title: eventDetails.Title || "",
+        Description: eventDetails.Description || "",
+        Date: eventDetails.Date || "",
         location: eventDetails.location || "",
       });
     }
@@ -34,6 +34,9 @@ const UpdateEvent = ({ eventId, showModal, setShowModal, eventDetails }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(updateEvent({ eventId, updateEventData: formData }));
+    console.log("Payload envoyé :", { eventId, updateEventData: formData });
+
+    
     setShowModal(false);
   };
 
@@ -47,8 +50,8 @@ const UpdateEvent = ({ eventId, showModal, setShowModal, eventDetails }) => {
               <label className="block text-gray-700">Titre</label>
               <input
                 type="text"
-                name="title"
-                value={formData.title}
+                name="Title"
+                value={formData.Title}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded-md"
                 required
@@ -57,8 +60,8 @@ const UpdateEvent = ({ eventId, showModal, setShowModal, eventDetails }) => {
             <div className="mb-4">
               <label className="block text-gray-700">Description</label>
               <textarea
-                name="description"
-                value={formData.description}
+                name="Description"
+                value={formData.Description}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded-md"
                 required
@@ -68,8 +71,8 @@ const UpdateEvent = ({ eventId, showModal, setShowModal, eventDetails }) => {
               <label className="block text-gray-700">Date</label>
               <input
                 type="date"
-                name="date"
-                value={formData.date}
+                name="Date"
+                value={formData.Date}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded-md"
                 required

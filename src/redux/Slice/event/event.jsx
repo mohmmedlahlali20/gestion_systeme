@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import path from "../../../axios/axios";
 import Swal from "sweetalert2";
+import { stackTraceLimit } from "postcss/lib/css-syntax-error";
 
 export const fetchAllEvents = createAsyncThunk(
   "fetchAllEvents",
@@ -44,23 +45,29 @@ export const updateEvent = createAsyncThunk(
   async ({ eventId, updateEventData }, { rejectWithValue }) => {
     try {
       const response = await path.patch(`/event/${eventId}`, updateEventData);
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Événement mis à jour avec succès",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      return response.data;
-    } catch (error) {
+      console.log('====================================');
+      console.log(updateEventData);
+      console.log('====================================');
+      if (response.status === 200) {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Événement mis à jour avec succès",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        return response.data;
+      }
+      
+      
+    } catch (err) {
       Swal.fire({
         position: "top-end",
         icon: "error",
-        title: "Échec de la mise à jour de l'événement",
+        title: `Échec de la mise à jour de l'événement : ${err}`,
         showConfirmButton: true,
       });
-      console.error("Error updating event:", error);
-      return rejectWithValue("Failed to update event");
+    
     }
   }
 );
@@ -128,6 +135,9 @@ const eventSlice = createSlice({
     createEvent: (state, action) => {
       state.events.push(action.payload);
     },
+    updateEvent: (state, action) => {
+      state.events.push(action.payload);
+    },
     addUserInEvent: (state, action) => {
       const { eventId, user } = action.payload;
       const event = state.events.find((e) => e.id === eventId);
@@ -181,6 +191,10 @@ const eventSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
+      .addCase(updateEvent.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(addUserToEvent.fulfilled, (state, action) => {
         state.loading = false;
         const { eventId, user } = action.payload;
@@ -193,16 +207,17 @@ const eventSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(updateEvent.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
       .addCase(updateEvent.fulfilled, (state, action) => {
         state.loading = false;
         const updatedEvent = action.payload;
-        const index = state.events.findIndex((event) => event.id === updatedEvent.id);
-        if (index !== -1) {
-          state.events[index] = updatedEvent;
+      
+        if (updatedEvent && updatedEvent._id) {
+          const index = state.events.findIndex((event) => event._id === updatedEvent._id);
+          if (index !== -1) {
+            state.events[index] = updatedEvent;
+          }
+        } else {
+          console.error("L'objet mis à jour est invalide :", updatedEvent);
         }
       })
       .addCase(updateEvent.rejected, (state, action) => {
