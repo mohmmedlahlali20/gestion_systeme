@@ -1,24 +1,17 @@
 import React from 'react'
 import { FaCalendarAlt, FaMapMarkerAlt, FaVideo } from 'react-icons/fa'
 import { Button, Typography } from '@mui/material'
+import { Link } from 'react-router-dom'
 
 export default function Home() {
   return (
     <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black min-h-screen flex flex-col justify-between text-white">
-     
-      <header 
-        className="w-full p-10 text-center shadow-lg"
-        style={{
-          backgroundImage: '' ,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
-      >
+
+      <header className="w-full p-10 text-center shadow-lg">
         <Typography variant="h2" className="font-extrabold tracking-wide text-white mb-2">
           Event Management at its Best
         </Typography>
-        <br/>
+        <br />
         <Typography variant="h5" className="text-gray-200 max-w-lg mx-auto mb-8">
           Manage your events, venues, and media seamlessly with our platform.
         </Typography>
@@ -27,12 +20,18 @@ export default function Home() {
           <Button variant="contained" color="teal" size="large" className="shadow-2xl m-5">
             Get Started
           </Button>
-          <Button variant="outlined" color="teal" size="large" className="m-5">
-            Login
-          </Button>
-          <Button variant="outlined" color="teal" size="large" className="m-5">
-            Register
-          </Button>
+          <Link to="/login">
+            <Button variant="outlined" color="teal" size="large" className="m-5">
+              Login
+            </Button>
+          </Link>
+          <Link to="/register">
+            <Button variant="outlined" color="teal" size="large" className="m-5">
+              Register
+            </Button>
+          </Link>
+
+
         </div>
       </header>
 
