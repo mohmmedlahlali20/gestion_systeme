@@ -99,27 +99,43 @@ export const addUserToEvent = createAsyncThunk(
     }
   }
 );
-export const getEventByUserId = createAsyncThunk('GetUserIDs',
+export const getEventByUserId = createAsyncThunk(
+  'event/GetUserEvents',
   async ({ userId }, { rejectWithValue }) => {
+    
     try {
-      const res = await path.get(`event/eventsUser/${userId}`)
-      return res.data
-    } catch (error) {
-      console.error("Error fetching events:", error);
-      return rejectWithValue("Failed to fetch events");
-    }
-  }
-
-)
-
-export const DeleteEventByID = createAsyncThunk('removeEvents',
-  async ({ eventId }, { rejectWithValue }) => {
-    try {
-      const res = await path.delete(`event/remove/${eventId}`);
+      const res = await path.get(`event/eventsUser/${userId}`);
       return res.data;
     } catch (error) {
-      console.error("Error deleting event:", error);
-      return rejectWithValue("Failed to delete event");
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue('An unexpected error occurred'); 
+      }
+    }
+  }
+);
+
+
+export const DeleteEventByID = createAsyncThunk('removeEvents',
+  async ({ eventId }) => {
+    try {
+      const res = await path.delete(`event/remove/${eventId}`);
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Événement ajouté avec succès",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return res.data;
+    } catch (error) {
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: "Échec de la création de l'événement",
+        showConfirmButton: true,
+      });
     }
   }
 );
@@ -231,11 +247,12 @@ const eventSlice = createSlice({
       .addCase(DeleteEventByID.fulfilled, (state, action) => {
         state.loading = false;
         state.events = state.events.filter(event => event.id !== action.payload.id);
-      })
+      })      
       .addCase(DeleteEventByID.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+      
   },
 });
 

@@ -1,12 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TbLayoutDashboard } from "react-icons/tb";
 import { MdEventAvailable } from "react-icons/md";
-import { FaUsers } from "react-icons/fa";
+import { FaUsers, FaDoorOpen } from "react-icons/fa";
+import Cookies from "js-cookie";
+import { useDispatch } from "react-redux"; 
+import { logout as logoutAction  } from "../redux/Slice/auth/auth"; 
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Sidebar() {
   const [collapseShow, setCollapseShow] = useState("hidden");
+  const dispatch = useDispatch(); 
+  const navigation = useNavigate()
+
+  const logout = () => {
+    Cookies.remove("token");
+    Cookies.remove("user");
+
+    dispatch(logoutAction());
+
+    navigation("/login");
+  };
+  
 
   return (
     <nav className="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-teal-500 flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6">
@@ -19,8 +34,6 @@ export default function Sidebar() {
         >
           <i className="fas fa-bars"></i>
         </button>
-
-    
 
         <div
           className={`md:flex md:flex-col md:items-stretch md:opacity-100 md:relative md:mt-4 md:shadow-none shadow absolute top-0 left-0 right-0 z-40 overflow-y-auto overflow-x-hidden h-auto items-center flex-1 rounded ${collapseShow}`}
@@ -75,6 +88,14 @@ export default function Sidebar() {
             </li>
           </ul>
           <hr className="my-4 md:min-w-full" />
+   
+              <button
+                onClick={logout}
+                className="text-white hover:text-gray-300 flex items-center gap-2 text-sm font-semibold py-2"
+              >
+                <FaDoorOpen size={20} /> Logout
+              </button>
+           
         </div>
       </div>
     </nav>

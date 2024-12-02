@@ -88,7 +88,7 @@ export default function Register() {
             type="submit"
             disabled={loading}
             className={`w-full py-2 text-white rounded-lg ${
-              loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
+              loading ? "bg-gray-400 cursor-not-allowed" : "bg-teal-500 hover:bg-teal-600"
             }`}
           >
             {loading ? "Registering..." : "Register"}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllEvents } from "../../redux/Slice/event/event";
+import { fetchAllEvents, DeleteEventByID } from "../../redux/Slice/event/event";
 import CreateEvent from "./CreateEvent";
 import UpdateEvent from "./UpdateEvent";
 
@@ -21,7 +21,8 @@ export default function AllEvents() {
   };
 
   const handleDelete = (id) => {
-    console.log("Delete event with ID:", id);
+    dispatch(DeleteEventByID({ eventId: id }))
+    dispatch(fetchAllEvents());
   };
 
   return (

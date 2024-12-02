@@ -37,7 +37,7 @@
         if (Role === "organisateur") {
           navigate('/dashbord')
         } else {
-          navigate('/Home')
+          navigate('/users')
         }
 
         dispatch(loginSuccess(result.data));
@@ -103,7 +103,7 @@
 
             <div className="mt-4 text-center">
               <a
-                href="/forgot-password"
+                href="/register"
                 className="text-sm text-teal-600 hover:text-teal-800"
               >
                 I have an account
